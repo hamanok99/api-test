@@ -23,14 +23,13 @@ exports.deleteOrder = function(orderId) {
  **/
 exports.getInventory = function() {
   return new Promise(function(resolve, reject) {
+
     var examples = {};
     examples['application/json'] = {
-  "bytes": [
-    123,
-    125
-  ],
-  "empty": false
-};
+    "id" : "01",
+    "name" : "name",
+    };
+
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

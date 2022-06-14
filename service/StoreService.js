@@ -19,12 +19,18 @@ exports.deleteOrder = function(orderId) {
  * Returns pet inventories by status
  * Returns a map of status codes to quantities
  *
- * returns Map
+ * returns Object
  **/
 exports.getInventory = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = {"empty": false};
+    examples['application/json'] = {
+  "bytes": [
+    123,
+    125
+  ],
+  "empty": false
+};
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

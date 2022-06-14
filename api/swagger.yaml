@@ -317,9 +317,11 @@ paths:
             properties:
               id:
                 type: "string"
+                default: '00'
                 example: "01"
               name:
                 type: "string"
+                default: 'default'
                 example: "name"
       x-swagger-router-controller: "Store"
   /store/order:

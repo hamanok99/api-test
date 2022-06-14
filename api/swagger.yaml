@@ -1,776 +1,649 @@
 ---
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "This is a sample server Petstore server.  You can find out more about\
-    \     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,\
-    \ #swagger](http://swagger.io/irc/).      For this sample, you can use the api\
-    \ key `special-key` to test the authorization     filters."
-  version: "1.0.0"
-  title: "Swagger Petstore"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "api-test99.herokuapp.com"
-basePath: "/v2"
-tags:
-- name: "pet"
-  description: "Everything about your Pets"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "store"
-  description: "Access to Petstore orders"
-- name: "user"
-  description: "Operations about user"
-  externalDocs:
-    description: "Find out more about our store"
-    url: "http://swagger.io"
-schemes:
-- "https"
-- "http"
+  title: dbaas
+  version: Unknown
+consumes:
+- application/json
+produces:
+- application/json
 paths:
-  /pet:
+  "/":
+    get:
+      operationId: getVersions
+      summary: List versions
+      description: |
+        Lists information about all Database Service API versions.
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "versions": [
+                      {
+                          "status": "CURRENT",
+                          "updated": "2012-01-01T00:00:00Z",
+                          "id": "v1.0",
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/",
+                                  "rel": "self"
+                              }
+                          ]
+                      }
+                  ]
+              }
+  "/v1.0":
+    get:
+      operationId: getVersionInfo
+      summary: Show version details
+      description: |
+        Shows details for the Database Service API v1.0.
+      produces:
+      - application/json
+      responses:
+        '202':
+          description: 202 response
+          examples:
+            application/json: |-
+              {
+                  "versions": [
+                      {
+                          "status": "CURRENT",
+                          "updated": "2012-08-01T00:00:00Z",
+                          "id": "v1.0",
+                          "links": [
+                              {
+                                  "href": "http://23.253.228.211:8779/v1.0/",
+                                  "rel": "self"
+                              }
+                          ]
+                      }
+                  ]
+              }
+  "/v1.0/{accountId}/instances":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
     post:
-      tags:
-      - "pet"
-      summary: "Add a new pet to the store"
-      description: ""
-      operationId: "addPet"
-      consumes:
-      - "application/json"
-      - "application/xml"
+      operationId: createInstance
+      summary: Create database instance
+      description: |
+        Creates a database instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - application/json
       responses:
-        "405":
-          description: "Invalid input"
-      x-swagger-router-controller: "Pet"
-    put:
-      tags:
-      - "pet"
-      summary: "Update an existing pet"
-      description: ""
-      operationId: "updatePet"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-        "405":
-          description: "Validation exception"
-      x-swagger-router-controller: "Pet"
-  /pet/findByStatus:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "instance": {
+                      "status": "BUILD",
+                      "updated": "2012-01-25T21:53:10Z",
+                      "name": "json_rack_instance",
+                      "links": [
+                          {
+                              "href": "https://openstack.example.com/v1.0/1234/instances/dea5a2f7-3ec7-4496-adab-0abb5a42d635",
+                              "rel": "self"
+                          },
+                          {
+                              "href": "https://openstack.example.com/instances/dea5a2f7-3ec7-4496-adab-0abb5a42d635",
+                              "rel": "bookmark"
+                          }
+                      ],
+                      "created": "2012-01-25T21:53:09Z",
+                      "hostname": "e09ad9a3f73309469cf1f43d11e79549caf9acf2.rackspaceclouddb.com",
+                      "volume": {
+                          "size": 2
+                      },
+                      "flavor": {
+                          "id": "1",
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/1",
+                                  "rel": "bookmark"
+                              }
+                          ]
+                      },
+                      "id": "dea5a2f7-3ec7-4496-adab-0abb5a42d635"
+                  }
+              }
     get:
-      tags:
-      - "pet"
-      summary: "Finds Pets by status"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findPetsByStatus"
+      operationId: getInstance
+      summary: List database instances
+      description: |
+        Lists information, including status, for all database instances.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "status"
-        in: "query"
-        description: "Status values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          default: "available"
-          enum:
-          - "available"
-          - "pending"
-          - "sold"
-        collectionFormat: "multi"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        "400":
-          description: "Invalid status value"
-      x-swagger-router-controller: "Pet"
-  /pet/findByTags:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "instances": [
+                      {
+                          "status": "ACTIVE",
+                          "name": "json_rack_instance",
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/instances/28d1b8f3-172a-4f6d-983d-36021508444a",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/instances/28d1b8f3-172a-4f6d-983d-36021508444a",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "volume": {
+                              "size": 2
+                          },
+                          "flavor": {
+                              "id": "1",
+                              "links": [
+                                  {
+                                      "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                                      "rel": "self"
+                                  },
+                                  {
+                                      "href": "https://openstack.example.com/flavors/1",
+                                      "rel": "bookmark"
+                                  }
+                              ]
+                          },
+                          "id": "28d1b8f3-172a-4f6d-983d-36021508444a"
+                      },
+                      {
+                          "status": "ACTIVE",
+                          "name": "xml_rack_instance",
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/instances/8fb081af-f237-44f5-80cc-b46be1840ca9",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/instances/8fb081af-f237-44f5-80cc-b46be1840ca9",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "volume": {
+                              "size": 2
+                          },
+                          "flavor": {
+                              "id": "1",
+                              "links": [
+                                  {
+                                      "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                                      "rel": "self"
+                                  },
+                                  {
+                                      "href": "https://openstack.example.com/flavors/1",
+                                      "rel": "bookmark"
+                                  }
+                              ]
+                          },
+                          "id": "8fb081af-f237-44f5-80cc-b46be1840ca9"
+                      }
+                  ]
+              }
+  "/v1.0/{accountId}/instances/{instanceId}":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
     get:
-      tags:
-      - "pet"
-      summary: "Finds Pets by tags"
-      description: "Muliple tags can be provided with comma separated strings. Use\
-        \         tag1, tag2, tag3 for testing."
-      operationId: "findPetsByTags"
+      operationId: getInstanceById
+      summary: Show database instance details
+      description: |
+        Shows database instance details.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Tags to filter by"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-      deprecated: true
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Pet"
-        "400":
-          description: "Invalid tag value"
-      x-swagger-router-controller: "Pet"
-  /pet/{petId}:
-    get:
-      tags:
-      - "pet"
-      summary: "Find pet by ID"
-      description: "Returns a single pet"
-      operationId: "getPetById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to return"
-        required: true
-        type: "integer"
-        format: "int64"
-      security:
-      - api_key: []
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Pet"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-      x-swagger-router-controller: "Pet"
-    post:
-      tags:
-      - "pet"
-      summary: "Updates a pet in the store with form data"
-      description: ""
-      operationId: "updatePetWithForm"
-      consumes:
-      - "application/x-www-form-urlencoded"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet that needs to be updated"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "name"
-        in: "formData"
-        description: "Updated name of the pet"
-        required: false
-        type: "string"
-      - name: "status"
-        in: "formData"
-        description: "Updated status of the pet"
-        required: false
-        type: "string"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
-      responses:
-        "405":
-          description: "Invalid input"
-      x-swagger-router-controller: "Pet"
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "instance": {
+                      "status": "ACTIVE",
+                      "updated": "2012-03-28T21:34:25Z",
+                      "name": "xml_rack_instance",
+                      "links": [
+                          {
+                              "href": "https://openstack.example.com/v1.0/1234/instances/2450c73f-7805-4afe-a42c-4094ab42666b",
+                              "rel": "self"
+                          },
+                          {
+                              "href": "https://openstack.example.com/instances/2450c73f-7805-4afe-a42c-4094ab42666b",
+                              "rel": "bookmark"
+                          }
+                      ],
+                      "created": "2012-03-28T21:31:02Z",
+                      "hostname": "e09ad9a3f73309469cf1f43d11e79549caf9acf2.rackspaceclouddb.com",
+                      "volume": {
+                          "used": 0.124542236328125,
+                          "size": 2
+                      },
+                      "flavor": {
+                          "id": "1",
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/1",
+                                  "rel": "bookmark"
+                              }
+                          ]
+                      },
+                      "id": "2450c73f-7805-4afe-a42c-4094ab42666b"
+                  }
+              }
     delete:
-      tags:
-      - "pet"
-      summary: "Deletes a pet"
-      description: ""
-      operationId: "deletePet"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "petId"
-        in: "path"
-        description: "Pet id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      operationId: deleteInstance
+      summary: Delete database instance
+      description: |
+        Deletes a specified database instance, including any associated data.
+      produces: []
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Pet not found"
-      x-swagger-router-controller: "Pet"
-  /pet/{petId}/uploadImage:
+        '202':
+          description: 202 response
+  "/v1.0/{accountId}/instances/{instanceId}/action":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
     post:
-      tags:
-      - "pet"
-      summary: "uploads an image"
-      description: ""
-      operationId: "uploadFile"
-      consumes:
-      - "multipart/form-data"
+      operationId: restartInstance
+      summary: Restart instance
+      description: |
+        Restarts the database service on an instance.
       produces:
-      - "application/json"
-      parameters:
-      - name: "petId"
-        in: "path"
-        description: "ID of pet to update"
-        required: true
-        type: "integer"
-        format: "int64"
-      - name: "additionalMetadata"
-        in: "formData"
-        description: "Additional data to pass to server"
-        required: false
-        type: "string"
-      - name: "file"
-        in: "formData"
-        description: "file to upload"
-        required: false
-        type: "file"
-      security:
-      - petstore_auth:
-        - "write:pets"
-        - "read:pets"
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-      x-swagger-router-controller: "Pet"
-  /store/inventory:
-    get:
-      tags:
-      - "store"
-      summary: "Returns pet inventories by status"
-      description: "Returns a map of status codes to quantities"
-      operationId: "getInventory"
-      produces:
-      - "application/json"
-      parameters: []
-      security:
-      - api_key: []
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "object"
-            properties:
-              id:
-                type: "string"
-              name:
-                type: "string"
-            example:
-              id: "01"
-              name: "test"
-            additionalProperties:
-              type: "integer"
-              format: "int32"
-      x-swagger-router-controller: "Store"
-  /store/order:
+        '202':
+          description: 202 response
+          examples: {}
+  "/v1.0/{accountId}/instances/{instanceId}/databases":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
     post:
-      tags:
-      - "store"
-      summary: "Place an order for a pet"
-      description: ""
-      operationId: "placeOrder"
+      operationId: createDatabase
+      summary: Create database
+      description: |
+        Creates a database within a specified instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "order placed for purchasing the pet"
-        required: true
-        schema:
-          $ref: "#/definitions/Order"
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Order"
-        "400":
-          description: "Invalid Order"
-      x-swagger-router-controller: "Store"
-  /store/order/{orderId}:
+        '202':
+          description: 202 response
+          examples: {}
     get:
-      tags:
-      - "store"
-      summary: "Find purchase order by ID"
-      description: "For valid response try integer IDs with value >= 1 and <= 10.\
-        \         Other values will generated exceptions"
-      operationId: "getOrderById"
+      operationId: getDatabases
+      summary: List instance databases
+      description: |
+        Lists databases for a specified instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        type: "integer"
-        maximum: 10
-        minimum: 1
-        format: "int64"
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Order"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Order not found"
-      x-swagger-router-controller: "Store"
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "databases": [
+                      {
+                          "name": "anotherexampledb"
+                      },
+                      {
+                          "name": "exampledb"
+                      },
+                      {
+                          "name": "nextround"
+                      },
+                      {
+                          "name": "sampledb"
+                      },
+                      {
+                          "name": "testingdb"
+                      }
+                  ]
+              }
+  "/v1.0/{accountId}/instances/{instanceId}/databases/{databaseName}":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
+    - name: databaseName
+      required: true
+      in: path
+      type: string
+      description: |
+        The name for the specified database.
     delete:
-      tags:
-      - "store"
-      summary: "Delete purchase order by ID"
-      description: "For valid response try integer IDs with positive integer value.\
-        \         Negative or non-integer values will generate API errors"
-      operationId: "deleteOrder"
+      operationId: deleteDatabase
+      summary: Delete database
+      description: |
+        Deletes a specified database.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "orderId"
-        in: "path"
-        description: "ID of the order that needs to be deleted"
-        required: true
-        type: "integer"
-        minimum: 1
-        format: "int64"
+      - application/json
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Order not found"
-      x-swagger-router-controller: "Store"
-  /user:
+        '202':
+          description: 202 response
+          examples: {}
+  "/v1.0/{accountId}/instances/{instanceId}/users":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
     post:
-      tags:
-      - "user"
-      summary: "Create user"
-      description: "This can only be done by the logged in user."
-      operationId: "createUser"
+      operationId: createUser
+      summary: Create user
+      description: |
+        Creates a user for a specified database instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
+      - application/json
       responses:
-        default:
-          description: "successful operation"
-      x-swagger-router-controller: "User"
-  /user/createWithArray:
-    post:
-      tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithArrayInput"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-      x-swagger-router-controller: "User"
-  /user/createWithList:
-    post:
-      tags:
-      - "user"
-      summary: "Creates list of users with given input array"
-      description: ""
-      operationId: "createUsersWithListInput"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-      x-swagger-router-controller: "User"
-  /user/login:
+        '202':
+          description: 202 response
+          examples: {}
     get:
-      tags:
-      - "user"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
+      operationId: getUsers
+      summary: List database instance users
+      description: |
+        Lists the users in a specified database instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
+      - application/json
       responses:
-        "200":
-          description: "successful operation"
-          headers:
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-          schema:
-            type: "string"
-        "400":
-          description: "Invalid username/password supplied"
-      x-swagger-router-controller: "User"
-  /user/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters: []
-      responses:
-        default:
-          description: "successful operation"
-      x-swagger-router-controller: "User"
-  /user/{username}:
-    get:
-      tags:
-      - "user"
-      summary: "Get user by user name"
-      description: ""
-      operationId: "getUserByName"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
-      x-swagger-router-controller: "User"
-    put:
-      tags:
-      - "user"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        "400":
-          description: "Invalid user supplied"
-        "404":
-          description: "User not found"
-      x-swagger-router-controller: "User"
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "users": [
+                      {
+                          "name": "dbuser3",
+                          "databases": [
+                              {
+                                  "name": "databaseA"
+                              }
+                          ]
+                      },
+                      {
+                          "name": "dbuser4",
+                          "databases": [
+                              {
+                                  "name": "databaseB"
+                              },
+                              {
+                                  "name": "databaseC"
+                              }
+                          ]
+                      }
+                  ]
+              }
+  "/v1.0/{accountId}/instances/{instanceId}/users/{name}":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
+    - name: name
+      required: true
+      in: path
+      type: string
+      description: |
+        The name for the specified user.
     delete:
-      tags:
-      - "user"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
+      operationId: deleteUser
+      summary: Delete user
+      description: |
+        Deletes a specified user for a specified database instance.
       produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
+      - application/json
       responses:
-        "400":
-          description: "Invalid username supplied"
-        "404":
-          description: "User not found"
-      x-swagger-router-controller: "User"
-securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-definitions:
-  Order:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      petId:
-        type: "integer"
-        format: "int64"
-      quantity:
-        type: "integer"
-        format: "int32"
-      shipDate:
-        type: "string"
-        format: "date-time"
-      status:
-        type: "string"
-        description: "Order Status"
-        enum:
-        - "placed"
-        - "approved"
-        - "delivered"
-      complete:
-        type: "boolean"
-        default: false
-    xml:
-      name: "Order"
-    example:
-      petId: 6
-      quantity: 1
-      id: 0
-      shipDate: "2000-01-23T04:56:07.000+00:00"
-      complete: false
-      status: "placed"
-  Category:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Category"
-    example:
-      name: "name"
-      id: 6
-  User:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      username:
-        type: "string"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-      password:
-        type: "string"
-      phone:
-        type: "string"
-      userStatus:
-        type: "integer"
-        format: "int32"
-        description: "User Status"
-    xml:
-      name: "User"
-    example:
-      firstName: "firstName"
-      lastName: "lastName"
-      password: "password"
-      userStatus: 6
-      phone: "phone"
-      id: 0
-      email: "email"
-      username: "username"
-  Tag:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Tag"
-    example:
-      name: "name"
-      id: 1
-  Pet:
-    type: "object"
-    required:
-    - "name"
-    - "photoUrls"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      name:
-        type: "string"
-        example: "doggie"
-      photoUrls:
-        type: "array"
-        xml:
-          name: "photoUrl"
-          wrapped: true
-        items:
-          type: "string"
-      tags:
-        type: "array"
-        xml:
-          name: "tag"
-          wrapped: true
-        items:
-          $ref: "#/definitions/Tag"
-      status:
-        type: "string"
-        description: "pet status in the store"
-        enum:
-        - "available"
-        - "pending"
-        - "sold"
-    xml:
-      name: "Pet"
-    example:
-      photoUrls:
-      - "photoUrls"
-      - "photoUrls"
-      name: "doggie"
-      id: 0
-      category:
-        name: "name"
-        id: 6
-      tags:
-      - name: "name"
-        id: 1
-      - name: "name"
-        id: 1
-      status: "available"
-  ApiResponse:
-    type: "object"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-      type:
-        type: "string"
-      message:
-        type: "string"
-    example:
-      code: 0
-      type: "type"
-      message: "message"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+        '202':
+          description: 202 response
+          examples: {}
+  "/v1.0/{accountId}/instances/{instanceId}/root":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: instanceId
+      required: true
+      in: path
+      type: string
+      description: |
+        The instance ID for the specified database instance.
+    post:
+      operationId: createRoot
+      summary: Enable root user
+      description: |
+        Enables the root user for a specified database instance and returns the root password.
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "user": {
+                      "password": "secretsecret",
+                      "name": "root"
+                  }
+              }
+    get:
+      operationId: isRootEnabled
+      summary: Show root-enabled status for database instance
+      description: |
+        Shows root-enabled status for a database instance.
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "rootEnabled": true
+              }
+  "/v1.0/{accountId}/flavors":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    get:
+      operationId: getFlavors
+      summary: List flavors
+      description: |
+        Lists information for all available flavors.
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "flavors": [
+                      {
+                          "ram": 512,
+                          "id": 1,
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/1",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "name": "m1.tiny"
+                      },
+                      {
+                          "ram": 1024,
+                          "id": 2,
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/2",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/2",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "name": "m1.small"
+                      },
+                      {
+                          "ram": 2048,
+                          "id": 3,
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/3",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/3",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "name": "m1.medium"
+                      },
+                      {
+                          "ram": 4096,
+                          "id": 4,
+                          "links": [
+                              {
+                                  "href": "https://openstack.example.com/v1.0/1234/flavors/4",
+                                  "rel": "self"
+                              },
+                              {
+                                  "href": "https://openstack.example.com/flavors/4",
+                                  "rel": "bookmark"
+                              }
+                          ],
+                          "name": "m1.large"
+                      }
+                  ]
+              }
+  "/v1.0/{accountId}/flavors/{flavorId}":
+    parameters:
+    - name: accountId
+      required: true
+      in: path
+      type: string
+      description: |
+        The account ID of the owner of the specified instance.
+    - name: flavorId
+      required: true
+      in: path
+      type: string
+      description: |
+        The flavor ID for the specified flavor.
+    get:
+      operationId: getFlavorById
+      summary: Show flavor details
+      description: |
+        Shows flavor details.
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: 200 response
+          examples:
+            application/json: |-
+              {
+                  "flavor": {
+                      "ram": 512,
+                      "id": 1,
+                      "links": [
+                          {
+                              "href": "https://openstack.example.com/v1.0/1234/flavors/1",
+                              "rel": "self"
+                          },
+                          {
+                              "href": "https://openstack.example.com/flavors/1",
+                              "rel": "bookmark"
+                          }
+                      ],
+                      "name": "m1.tiny"
+                  }
+              }

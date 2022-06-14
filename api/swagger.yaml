@@ -314,14 +314,20 @@ paths:
           description: "successful operation"
           schema:
             type: "object"
-            properties:
-              id:
-                type: "integer"
-                format: "int64"
-                example: 1
-              name:
-                type: "string"
-                example: "doggie"
+              properties:
+                no:
+                  type: "string"
+                name:
+                  type: "string"
+                type:
+                  type: "string"
+                comment:
+                  type: "string"
+              example:
+                no: "007"
+                name: "ゼニガメ"
+                type: "みず"
+                comment: "こうらに とじこもり みをまもる。"
             additionalProperties:
               type: "integer"
               format: "int32"

@@ -13,7 +13,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
+host: "api-test99.herokuapp.com"
 basePath: "/v2"
 tags:
 - name: "pet"
@@ -32,6 +32,16 @@ schemes:
 - "https"
 - "http"
 paths:
+  /ping:
+    get:
+      responses:
+        '200':
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+                example: "pong"
   /pet:
     post:
       tags:

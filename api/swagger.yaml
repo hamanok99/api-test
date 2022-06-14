@@ -314,6 +314,14 @@ paths:
           description: "successful operation"
           schema:
             type: "object"
+            properties:
+              id:
+                type: "integer"
+                format: "int64"
+                example: 1
+              name:
+                type: "string"
+                example: "doggie"
             additionalProperties:
               type: "integer"
               format: "int32"
